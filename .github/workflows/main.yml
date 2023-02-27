@@ -34,6 +34,9 @@ jobs:
       uses: supercharge/mongodb-github-action@1.8.0
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
+        mongodb-username: ${{ secrets.USER_NAME }}
+        mongodb-password: ${{ secrets.PASSWORD }}
+        mongodb-db: ${{ DB_NAME }}
         
     - name: Create .env file
       uses: SpicyPizza/create-envfile@v1.3
