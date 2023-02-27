@@ -36,11 +36,10 @@ jobs:
         mongodb-version: ${{ matrix.mongodb-version }}
         
     - name: Create .env file
-      uses: SpicyPizza/create-envfile@v1.3.0
-      with:
-        DB_URL: $ {{ secretes.DB_URL }}
-        file_name: .env
-        fail_on_empty: true
+      run: |
+          touch .env
+          echo DB_URL=${{ secrets.DB_URL }} >> .env
+          cat .env
         
     - run: npm install
     - run: npm test
