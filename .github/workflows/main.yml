@@ -40,5 +40,5 @@ jobs:
       with:
         DB_URL: $ {{ secretes.DB_URL }}
         
-    - run: npm ci
+    - run: npm install
     - run: npm test
