@@ -1,0 +1,42 @@
+name: CI
+
+on:
+    push:
+        branches: ["dev"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [18.x]
+                mongodb-version: ["5.0"]
+
+        steps:
+            - name: Git checkout
+              uses: actions/checkout@v3
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: "npm"
+
+            - name: Start MongoDB
+              uses: supercharge/mongodb-github-action@1.8.0
+              with:
+                  mongodb-version: ${{ matrix.mongodb-version }}
+                  mongodb-username: ${{ secrets.USER_NAME }}
+                  mongodb-password: ${{ secrets.PASSWORD }}
+                  mongodb-db: ${{ secrets.DB_NAME }}
+
+            - name: Create .env file
+              uses: SpicyPizza/create-envfile@v1.3
+              with:
+                  envkey_DB_URL: ${{ secrets.DB_URL }}
+                  file_name: .env
+                  fail_on_empty: true
+
+            - run: npm install
+            - run: npm test
